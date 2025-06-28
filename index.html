@@ -3,93 +3,124 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pix Parcelado vs Renda Fixa IPCA+10% aa</title>
+  <title>Calculadora Pix Parcelado vs Renda Fixa</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f4f4f9;
-      margin: 0;
-      padding: 2rem;
-      color: #333;
-      max-width: 900px;
-      margin-left: auto;
-      margin-right: auto;
+      max-width: 700px;
+      margin: 2rem auto;
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #ccc;
     }
-    h1, h2 {
+    h1 {
       color: #4a148c;
+      margin-bottom: 1rem;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 1rem 0;
-    }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 0.75rem;
-      text-align: left;
-    }
-    th {
-      background-color: #e0e0e0;
-    }
-    tfoot td {
+    label {
+      display: block;
+      margin-top: 1rem;
       font-weight: bold;
     }
-    footer {
-      margin-top: 3rem;
-      text-align: center;
-      font-style: italic;
+    input, select {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.3rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      margin-top: 1.5rem;
+      padding: 0.7rem 1.5rem;
+      font-size: 1.1rem;
+      background-color: #4a148c;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #380b73;
+    }
+    .result {
+      margin-top: 2rem;
+      padding: 1rem;
+      background: #e1bee7;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      color: #2e0854;
     }
   </style>
 </head>
 <body>
-  <h1>Pix Parcelado vs Investimento em Renda Fixa IPCA+10% ao ano</h1>
-  <p>Vamos analisar se vale a pena parcelar um Pix no crédito e aplicar o valor recebido em um investimento de renda fixa com rendimento de IPCA+10% ao ano.</p>
+  <h1>Calculadora Pix Parcelado vs Renda Fixa IPCA+10%</h1>
 
-  <h2>📅 Situação Real:</h2>
-  <ul>
-    <li>Valor do Pix: <strong>R$ 125,00</strong></li>
-    <li>Parcelado em: <strong>3x de R$ 44,74</strong></li>
-    <li>Total pago: <strong>R$ 134,22</strong></li>
-    <li>Investimento: <strong>Renda Fixa IPCA+10% ao ano</strong></li>
-  </ul>
+  <label for="pixValue">Valor do Pix (R$)</label>
+  <input type="number" id="pixValue" value="125" min="1" step="0.01" />
 
-  <h2>📊 Comparativo Financeiro por Período</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Item</th>
-        <th>1 Ano (R$)</th>
-        <th>5 Anos (R$)</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Juros do parcelamento</td>
-        <td>-9,22</td>
-        <td>-9,22</td>
-      </tr>
-      <tr>
-        <td>Ganho líquido do investimento</td>
-        <td>+10,63</td>
-        <td>+64,86</td>
-      </tr>
-    </tbody>
-    <tfoot>
-      <tr>
-        <td>Resultado final</td>
-        <td>+1,41</td>
-        <td>+55,64</td>
-      </tr>
-    </tfoot>
-  </table>
+  <label for="numParcelas">Número de parcelas</label>
+  <input type="number" id="numParcelas" value="3" min="1" step="1" />
 
-  <h2>✅ Conclusão</h2>
-  <p>Para um período de 1 ano, mesmo considerando os juros do parcelamento, o investimento gera um pequeno lucro líquido de <strong>R$ 1,41</strong>.</p>
-  <p>Para um período mais longo de 5 anos, o lucro líquido aumenta significativamente para <strong>R$ 55,64</strong>, tornando a operação vantajosa.</p>
-  <p>Entretanto, é importante considerar que o custo dos juros é pago no início e o investimento precisa durar o tempo indicado para maximizar os ganhos.</p>
+  <label for="valorParcela">Valor da parcela (R$)</label>
+  <input type="number" id="valorParcela" value="44.74" min="0.01" step="0.01" />
 
-  <footer>
-    Criado por <strong>Robson M. Santos</strong> — 2025
-  </footer>
+  <label for="periodoMeses">Período de investimento (meses)</label>
+  <input type="number" id="periodoMeses" value="12" min="1" step="1" />
+
+  <label for="taxaAnual">Taxa anual de rendimento (%)</label>
+  <input type="number" id="taxaAnual" value="10" min="0" step="0.01" />
+
+  <button onclick="calcular()">Calcular</button>
+
+  <div class="result" id="result"></div>
+
+  <script>
+    function calcular() {
+      const pixValue = parseFloat(document.getElementById('pixValue').value);
+      const numParcelas = parseInt(document.getElementById('numParcelas').value);
+      const valorParcela = parseFloat(document.getElementById('valorParcela').value);
+      const periodoMeses = parseInt(document.getElementById('periodoMeses').value);
+      const taxaAnual = parseFloat(document.getElementById('taxaAnual').value);
+
+      if (pixValue <= 0 || numParcelas <= 0 || valorParcela <= 0 || periodoMeses <= 0 || taxaAnual < 0) {
+        alert('Por favor, preencha todos os campos com valores válidos.');
+        return;
+      }
+
+      // Cálculo do total pago no parcelamento
+      const totalPago = valorParcela * numParcelas;
+      const jurosParcelamento = totalPago - pixValue;
+
+      // Cálculo do rendimento no período (juros compostos)
+      const taxaMensal = Math.pow(1 + taxaAnual / 100, 1/12) - 1;
+      const ganhoBruto = pixValue * (Math.pow(1 + taxaMensal, periodoMeses) - 1);
+
+      // Imposto de Renda (15% sobre o ganho)
+      const ir = ganhoBruto * 0.15;
+      const ganhoLiquido = ganhoBruto - ir;
+
+      const resultadoLiquido = ganhoLiquido - jurosParcelamento;
+
+      // Formatando números para moeda brasileira
+      function formatBRL(valor) {
+        return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      }
+
+      document.getElementById('result').innerHTML = `
+        <p><strong>Total pago no parcelamento:</strong> ${formatBRL(totalPago)}</p>
+        <p><strong>Juros pagos no parcelamento:</strong> ${formatBRL(jurosParcelamento)}</p>
+        <p><strong>Ganho bruto no investimento:</strong> ${formatBRL(ganhoBruto)}</p>
+        <p><strong>Imposto de Renda (15% sobre ganho):</strong> ${formatBRL(ir)}</p>
+        <p><strong>Ganho líquido no investimento:</strong> ${formatBRL(ganhoLiquido)}</p>
+        <hr />
+        <p><strong>Resultado líquido final (ganho - juros):</strong> ${formatBRL(resultadoLiquido)}</p>
+      `;
+    }
+
+    // Calcula ao carregar a página
+    window.onload = calcular;
+  </script>
 </body>
 </html>
